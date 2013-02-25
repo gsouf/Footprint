@@ -11,9 +11,7 @@ use Footprint\Entity\EntityInterface;
  */
 class Column extends AbstractElement{
     
-    public function hydrateProperty(EntityInterface $entity,$data) {
-        $this->set($entity, $data);
-    }
+
 
 }
 

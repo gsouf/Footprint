@@ -1,6 +1,6 @@
 <?php
 
-namespace Footprint\Scanner;
+namespace Footprint\Sql;
 
 use Footprint\Sql\SelectGenerator;
 use Footprint\DataPrint\DataPrintCollection;
@@ -37,7 +37,7 @@ class DBScanner {
             
             $resultSet = new ResultSet;
             $resultSet->initialize($result);
-            
+                        
             foreach ($resultSet as $row) {
                 $primaryTrace=$dataPrint->getPrimaryTrace($row,true);
                 if(!isset($HydratedObjects[$primaryTrace])){
@@ -46,10 +46,10 @@ class DBScanner {
                 }
                 
                 $hydrater->hydrate($HydratedObjects[$primaryTrace],$dataPrint,$row);
-                
-                var_dump($HydratedObjects[$primaryTrace]);
             }
         }
+        return $HydratedObjects;
+        
     }
     
     

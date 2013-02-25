@@ -10,7 +10,7 @@ use Footprint\DataPrint\Elements\AbstractElement;
  *
  * @author bobito
  */
-class Hydrater {
+class BufferedHydrater {
     
     public function __construct(){
         

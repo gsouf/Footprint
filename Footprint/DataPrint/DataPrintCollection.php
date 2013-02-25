@@ -3,6 +3,7 @@
 namespace Footprint\DataPrint;
 
 use Footprint\DataPrint\Elements\AbstractElement;
+use Footprint\DataPrint\Elements\Column;
 
 /**
  * Description of DataPrintCollection
@@ -17,6 +18,8 @@ class DataPrintCollection  implements \IteratorAggregate {
     
     private $primary;
     
+    private $incrementedIdentifier;
+    
     // TODO CONSTRUCTOR
     
     public function __construct($table="",$class="") {
@@ -25,6 +28,7 @@ class DataPrintCollection  implements \IteratorAggregate {
         $this->table=$table;
         $this->class=$class;
         
+        $incrementedIdentifier=0;
     }
     
     public function getIterator() {
@@ -32,6 +36,7 @@ class DataPrintCollection  implements \IteratorAggregate {
     }
     
     public function add(AbstractElement $value){
+        $value->_setIdentifier($this->incrementedIdentifier++);
         $this->elements[]=$value;
     }
     
@@ -46,6 +51,18 @@ class DataPrintCollection  implements \IteratorAggregate {
                 return $v;
         }
         return false;
+    }
+    
+    public function getArrayColumnsName() {
+        $arrayCol=array();
+        foreach($this->elements as $v){
+            if(is_a($v,"AbstractElement"))
+                $arrayCol;
+        }
+    }
+    
+    private function getUniqueName(){
+        
     }
 
     /**
@@ -73,6 +90,8 @@ class DataPrintCollection  implements \IteratorAggregate {
         
     }
     
+
+
     /**
      * 
      * @param string $value

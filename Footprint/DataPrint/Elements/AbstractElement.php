@@ -12,19 +12,21 @@ use \Footprint\Entity\EntityInterface;
 abstract class AbstractElement {
     
     /**
-     *
+     * @var int internal identifier used by the dataPrintCollection
+     */
+    private $internalIdentifier;
+    
+    /**
      * @var String name of the DB Column
      */
     private $columnName;
     
     /**
-     *
      * @var String name of the getter method, or null 
      */
     private $getter;
     
     /**
-     *
      * @var String name of the setter method, or null 
      */
     private $setter;
@@ -62,8 +64,14 @@ abstract class AbstractElement {
         $instance->$setterName($value);
     }
     
-    public abstract function hydrateProperty(EntityInterface $entity,$data);
-
+    public function _setIdentifier($identifier){
+        $this->internalIdentifier=$identifier;
+    }
+    
+    public function getIdentifier(){
+        return $this->internalIdentifier;
+    }
+    
 }
 
 ?>

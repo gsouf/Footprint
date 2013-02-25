@@ -19,6 +19,8 @@ class SelectGenerator {
     private $depthMode;
     private $options;
     
+    private $select;
+    
     public function __construct(Sql $sql,DataPrintCollection $dataPrint,$depthMode, $options=null) {
         $this->sql = $sql;
         $this->dataPrint = $dataPrint;
@@ -36,8 +38,12 @@ class SelectGenerator {
         
         $select->from($this->dataPrint->getTable());
         
-        return $select;
-    } 
+        
+        
+        
+        $this->select=$select;
+    }
+    
 
 }
 
