@@ -39,10 +39,15 @@ class DBScanner {
             $resultSet->initialize($result);
             
             foreach ($resultSet as $row) {
+                $primaryTrace=$dataPrint->getPrimaryTrace($row,true);
+                if(!isset($HydratedObjects[$primaryTrace])){
+                    $className=$dataPrint->getClass();
+                    $HydratedObjects[$primaryTrace]=new $className();
+                }
                 
-                var_dump($dataPrint->getPrimaryTrace($row,true));
+                $hydrater->hydrate($HydratedObjects[$primaryTrace],$dataPrint,$row);
                 
-                //$hydrater->hydrate($result->next(),true);
+                var_dump($HydratedObjects[$primaryTrace]);
             }
         }
     }

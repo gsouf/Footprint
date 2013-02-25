@@ -17,6 +17,8 @@ class DataPrintCollection  implements \IteratorAggregate {
     
     private $primary;
     
+    // TODO CONSTRUCTOR
+    
     public function __construct($table="",$class="") {
         $this->elements=array();
         $this->primary=array();

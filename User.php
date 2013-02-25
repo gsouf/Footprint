@@ -18,7 +18,10 @@ class User implements EntityInterface{
     private $email;
     private $password;
     
-    function __construct($email, $password) {
+    private $lastLogin;
+    private $registerDate;
+    
+    function __construct($email="", $password="") {
         $this->email = $email;
         $this->password = $password;
     }
@@ -32,6 +35,8 @@ class User implements EntityInterface{
             self::$dataPrintCollection->add(new Column("id_customer", "getId", "setId"));
             self::$dataPrintCollection->add(new Column("email", "getEmail", "setEmail"));
             self::$dataPrintCollection->add(new Column("password", "getPassword", "setPassword"));
+            self::$dataPrintCollection->add(new Column("date_register", "getRegisterDate", "setRegisterDate"));
+            self::$dataPrintCollection->add(new Column("date_last_login", "getLastLogin", "setLastLogin"));
             self::$dataPrintCollection->registerPrimary("id_customer");
         }
         
@@ -63,6 +68,23 @@ class User implements EntityInterface{
         $this->password = $password;
     }
     
+    public function getLastLogin() {
+        return $this->lastLogin;
+    }
+
+    public function setLastLogin($lastLogin) {
+        $this->lastLogin = $lastLogin;
+    }
+
+    public function getRegisterDate() {
+        return $this->registerDate;
+    }
+
+    public function setRegisterDate($registerDate) {
+        $this->registerDate = $registerDate;
+    }
+
+
     
 
 
