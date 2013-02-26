@@ -4,8 +4,12 @@
     use \Footprint\DataPrint\Elements\Column;
     use Zend\Db\Adapter\Adapter;
     use Zend\Db\Sql\Sql;
-    use \Footprint\Sql\SelectGenerator;
+    use Zend\Db\ResultSet\ResultSet;
+    use \Footprint\Sql\Generator\SelectGenerator;
+    use Footprint\Sql\Reader\SelectResultReader;
     use Footprint\Sql\DBScanner;
+    use Footprint\DataPrint\InternalPrintIterator;
+    
     
     
     
@@ -25,10 +29,19 @@
         ));
     
     $sql=new Sql($adapter);
-    
     $g=new SelectGenerator($sql, $dataPrint);
     $g->generate();
-    var_dump($g->getSelect()->getSqlString());
+    $result=$sql->prepareStatementForSqlObject($g->getSelect())->execute();
+    
+     $resultSet = new ResultSet;
+     $resultSet->initialize($result);
+     
+     
+     $reader=new SelectResultReader($dataPrint, $resultSet);
+     $reader->buff();
+     
+     
+     //var_dump($dataPrint->getElementByInternalPrint(new InternalPrintIterator("0$\$__6")));
     
     //$scanner=new DBScanner($adapter, $user->getDataPrint(), null);
     

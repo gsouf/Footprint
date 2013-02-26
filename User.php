@@ -16,7 +16,7 @@ class User implements EntityInterface{
     
     private $id;
     
-    private $idChild;
+    private $adress;
     
     private $email;
     private $password;
@@ -33,14 +33,15 @@ class User implements EntityInterface{
         
         if(!self::$dataPrintCollection){
             
-            $d1=new DataPrintCollection();
-            $d1->setClass("User");
+            $d1=new DataPrintCollection("","getAdress","setAdress");
+            $d1->setClass("Address");
             $d1->setTable("address");
-            $d1->add(new Column("id", "getIdChild", "setIdChild"));
-            $d1->add(new Column("id_customer", "getIdChild", "setIdChild"));
+            $d1->add(new Column("id", "getId", "setId"));
+            $d1->add(new Column("id_customer", "getIdCustomer", "setIdCustomer"));
             $d1->setJoin(array("id_customer"=>"id_customer"));
             $d1->setLinkMode(AbstractEntityElement::LINK_PARENT);
             $d1->registerPrimary("id");
+            
             
             self::$dataPrintCollection=new DataPrintCollection();
             self::$dataPrintCollection->setClass("User");
@@ -97,14 +98,18 @@ class User implements EntityInterface{
     public function setRegisterDate($registerDate) {
         $this->registerDate = $registerDate;
     }
-
-    public function getIdChild() {
-        return $this->idChild;
+    
+    public function getAdress() {
+        return $this->adress;
     }
 
-    public function setIdChild($idChild) {
-        $this->idChild = $idChild;
+    public function setAdress($adress) {
+        $this->adress[] = $adress;
     }
+
+
+    
+
 
 
     

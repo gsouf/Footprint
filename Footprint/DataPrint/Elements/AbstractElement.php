@@ -3,7 +3,7 @@
 namespace Footprint\DataPrint\Elements;
 
 use \Footprint\Entity\EntityInterface;
-use Footprint\Sql\SelectGenerator;
+use Footprint\Sql\Generator\SelectGenerator;
 
 /**
  * Description of AbstractElement
@@ -17,6 +17,11 @@ abstract class AbstractElement {
      * see http://social.msdn.microsoft.com/Forums/sk/databasedesign/thread/154c19c4-95ba-4b6f-b6ca-479288feabfb#473bcd1a-34c4-45e2-a60b-9f2881727a9c
      */
     const INTERNALPRINTTOKEN="\$__";
+    
+    /**
+     * @var String the tring which is used for the root dataprint internalprint
+     */
+    const ROOTTOKEN="0\$";
     
     /**
      * @var int internal identifier used by the dataPrint wrapper. Each identifier must be unique in each dataprint
@@ -88,8 +93,8 @@ abstract class AbstractElement {
     } 
     
     /**
-     * @param \Footprint\Entity\EntityInterface $instance Instance into which to set
-     * @param mixed $value set into the instance of the parent Entity
+     * @param \Footprint\Entity\EntityInterface $instance Instance on which "set" is call
+     * @param mixed $value value to set into instance
      */
     public function set($instance,$value){
         $setterName=$this->setter;

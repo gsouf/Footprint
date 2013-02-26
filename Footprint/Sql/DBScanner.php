@@ -2,7 +2,7 @@
 
 namespace Footprint\Sql;
 
-use Footprint\Sql\SelectGenerator;
+use Footprint\Sql\Generator\SelectGenerator;
 use Footprint\DataPrint\DataPrintCollection;
 use Footprint\Entity\Hydrater;
 

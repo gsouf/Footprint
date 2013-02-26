@@ -11,7 +11,7 @@ use Footprint\Entity\EntityInterface;
  */
 abstract class AbstractValueElement extends AbstractElement{
     
-    public function onSelect(\Footprint\Sql\SelectGenerator $selectGen) {
+    public function onSelect(\Footprint\Sql\Generator\SelectGenerator $selectGen) {
         $selectGen->addColumn($this->getColumnName(), $this->_getInternalPrint(),$this->getWrapper()->_getInternalPrint());
     }
 

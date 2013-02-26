@@ -6,8 +6,8 @@ use Footprint\Entity\EntityInterface;
 use Footprint\DataPrint\Elements\AbstractElement;
 use Footprint\DataPrint\Elements\Column;
 
-use Footprint\Sql\SelectGenerator;
-
+use Footprint\Sql\Generator\SelectGenerator;
+use Footprint\DataPrint\InternalPrintIterator;
 
 /**
  * Description of Column
@@ -49,19 +49,21 @@ class AbstractEntityElement extends AbstractElement implements \IteratorAggregat
     
     private $incrementedIdentifier;
     
+    private $nameToInternalprintMap;
+    
     // TODO CONSTRUCTOR
     
-    public function __construct($table="",$class="") {
+    public function __construct($columnName="", $getter="", $setter="") {
+        parent::__construct($columnName, $getter, $setter);
         $this->elements=array();
         $this->primary=array();
-        $this->table=$table;
-        $this->class=$class;
         
         $this->incrementedIdentifier=1;
-        $this->_setInternalPrint("0$");
+        $this->_setInternalPrint(self::ROOTTOKEN);
         
         $this->joinColumns = array();
         $this->linkMode = self::LINK_NONE;
+        $this->nameToInternalprintMap=null;
         
     }
     
@@ -75,6 +77,26 @@ class AbstractEntityElement extends AbstractElement implements \IteratorAggregat
         $value->_setInternalPrint($this->_getInternalPrint().self::INTERNALPRINTTOKEN.$value->_getIdentifier());
         $value->setWrapper($this);
         $this->elements[]=$value;
+        $this->nameToInternalprintMap=null;
+    }
+    
+    /**
+     * give a name map mapping the column names with the dataprint. 
+     * Intended to be used internaly with a resultSet generated from the selectGenerator to march the aliases with the true names
+     * @return array The key is the column name, value is the alias. Eg : array("id_user"=>"0$$__1" , "name"=>"0$$__2" )
+     */
+    public function getInternalPrintMap(){
+        if(null==$this->nameToInternalprintMap){
+            foreach($this as $v){
+                if(is_a($v,"Footprint\DataPrint\Elements\AbstractEntityElement")){
+
+                }else{
+                    $this->nameToInternalprintMap[$v->getColumnName()]=$v->_getInternalPrint();
+                }
+            }
+        }
+        
+        return $this->nameToInternalprintMap;
     }
     
     public function getInternalPrintOf($name){
@@ -100,6 +122,10 @@ class AbstractEntityElement extends AbstractElement implements \IteratorAggregat
      * @return AbstractElement|boolean
      */
     public function getElementByIdentifier($identifier){
+        
+        if(self::ROOTTOKEN==$identifier && self::ROOTTOKEN==$this->_getInternalPrint())
+            return $this;
+        
         foreach($this->elements as $v){
 
             if($v->_getIdentifier()==$identifier)
@@ -120,17 +146,17 @@ class AbstractEntityElement extends AbstractElement implements \IteratorAggregat
         if($iterator->valid())
             return $element->getElementByInternalPrint($iterator);
         
-        return $iterator;
+        return $element;
     }
 
     /**
      * Give the string merging the primary keys value for the given entity, using this dataprint
-     * @param StdObject $input object from which get the primary keys
+     * @param StdObject $input object from which get the primary keys. Usualy it is an entity, but it can also be a SQL result row (then useProperty instead of getters thank to param $useProperty)
+     * @param boolean $useProperty If true : properties will be used instead of getters. Default to false.
      * @param array|null $nameMap the map of names
-     * @param boolean $useProperty If true then properties will be used instead of getters. Default to false.
      * @return String A string which reprents a primary trace of the object in the db
      */
-    public function getPrimaryTrace($input,$useProperty=false,$nameMap=null){
+    public function getPrimaryTrace($inputData,$useProperty=false,$nameMap=null){
         $primaryTrace="";
         foreach($this->primary as $v){
             if(is_array($nameMap) && isset($nameMap[$v]))
@@ -139,9 +165,9 @@ class AbstractEntityElement extends AbstractElement implements \IteratorAggregat
                 $name=$v;
             
             if($useProperty)
-                $primaryTrace.=$input->$name;
+                $primaryTrace.=$inputData->$name;
             else
-                $primaryTrace.=$this->getElementByName($name)->get($input);
+                $primaryTrace.=$this->getElementByName($name)->get($inputData);
         }
         
         return $primaryTrace;
@@ -159,6 +185,7 @@ class AbstractEntityElement extends AbstractElement implements \IteratorAggregat
         foreach($this->elements as $v){
             $v->_setInternalPrint($this->_getInternalPrint().self::INTERNALPRINTTOKEN.$v->_getIdentifier());
         }
+        $this->nameToInternalprintMap=null;
     }
     
     
@@ -202,6 +229,9 @@ class AbstractEntityElement extends AbstractElement implements \IteratorAggregat
     
     public function setLinkMode($joinMode){
         $this->linkMode=$joinMode;
+    }
+    public function getLinkMode(){
+        return $this->linkMode;
     }
     
     public function onSelect(SelectGenerator $selectGenerator) {

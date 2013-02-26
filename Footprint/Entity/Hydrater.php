@@ -10,7 +10,7 @@ use Footprint\DataPrint\Elements\AbstractElement;
  *
  * @author bobito
  */
-class BufferedHydrater {
+class Hydrater {
     
     public function __construct(){
         
@@ -23,7 +23,7 @@ class BufferedHydrater {
      * @param StdClass|array $data the datas which will hydrate the object
      * @param array|null $nameMap Maps the object DataPrint columns to match with the given data names. Key is the dataPrint column name, value is the data name
      */
-    public function hydrate(EntityInterface $object,DataPrintCollection $dataPrint,$data,$nameMap=null){
+    public static function hydrate(EntityInterface $object,DataPrintCollection $dataPrint,$data,$nameMap=null){
         
         if(!$data)
             return false;
@@ -43,7 +43,7 @@ class BufferedHydrater {
                 $name=$nameMap[$v->getColumnName()];
             else 
                 $name=$v->getColumnName();
-            
+            var_dump($data->$name);
             $v->set($object,$data->$name);
             
         }

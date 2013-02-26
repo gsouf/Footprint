@@ -1,10 +1,9 @@
 <?php
 
-namespace Footprint\Sql;
+namespace Footprint\Sql\Generator;
 
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Sql;
-use Zend\Db\Adapter\Adapter;
 use Footprint\DataPrint\DataPrintCollection;
 
 /**

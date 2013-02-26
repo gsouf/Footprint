@@ -11,7 +11,7 @@ namespace Footprint\DataPrint;
 class InternalPrintIterator extends \ArrayIterator {
     
     public function __construct($InternalPrintString) {
-        parent::__construct($this->decodeString($string($InternalPrintString)));
+        parent::__construct($this->decodeString($InternalPrintString));
     }
     
     /**
@@ -19,8 +19,23 @@ class InternalPrintIterator extends \ArrayIterator {
      * @param string $string
      * @return array
      */
-    public function decodeString($string){
-        return explode(Elements\AbstractElement::INTERNALPRINTTOKEN, $string);
+    public function decodeString($stringParam){
+        $string="";
+        $finalArray=array();
+        
+        $arr=explode(Elements\AbstractElement::INTERNALPRINTTOKEN, $stringParam);
+  
+
+        foreach($arr as $v){
+            if(Elements\AbstractElement::ROOTTOKEN!=$v){
+                $string.=Elements\AbstractElement::INTERNALPRINTTOKEN;
+            }
+            $string.=$v;
+            $finalArray[$string]=$v;
+        }
+
+        //return explode(Elements\AbstractElement::INTERNALPRINTTOKEN, $stringParam);
+        return $finalArray;
     }
 }
 
