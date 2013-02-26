@@ -58,7 +58,7 @@ class AbstractEntityElement extends AbstractElement implements \IteratorAggregat
         $this->class=$class;
         
         $this->incrementedIdentifier=1;
-        $this->_setInternalPrint("0#");
+        $this->_setInternalPrint("0$");
         
         $this->joinColumns = array();
         $this->linkMode = self::LINK_NONE;
@@ -218,7 +218,7 @@ class AbstractEntityElement extends AbstractElement implements \IteratorAggregat
             //$onClause=key($this->joinColumns)."=".current($this->joinColumns);
             $onClause=$this->getWrapper()->_getInternalPrint().".".key($this->joinColumns)."=".$iPrint.".".current($this->joinColumns);
             
-            $selectGenerator->addJoin(array($iPrint=>$this->getTable()),$onClause,$print);
+            $selectGenerator->addJoin($iPrint,$this->getTable(),$onClause);
             break;
         case self::LINK_NONE :
             $selectGenerator->getSelect()->from(array($iPrint=>$this->getTable()));

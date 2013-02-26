@@ -22,7 +22,7 @@ class SelectGenerator {
     
     /**
      *
-     * @var array array("joinInternalPrint"=>array(,,))
+     * @var array array("joinInternalPrint"=>array(alias,table,onclause))
      */
     private $joins;
     
@@ -57,7 +57,10 @@ class SelectGenerator {
         
         $this->dataPrint->onSelect($this);
         
-        $select->columns($this->columns);
+        $select->columns($this->columns[$this->dataPrint->_getInternalPrint()]);
+        foreach($this->joins as $k=>$v){
+            $select->join(array($v[0]=>$v[1]), $v[2], $this->columns[$k]);
+        }
 
     }
     
@@ -65,8 +68,8 @@ class SelectGenerator {
         $this->columns[$wrapperPrint][$alias]=$col;
     }
     
-    public function addJoin($col,$alias,$wrapperPrint){
-        $this->columns[$wrapperPrint][$alias]=$col;
+    public function addJoin($alias,$table,$onClause){
+        $this->joins[$alias]=array($alias,$table,$onClause);
     }
     
 

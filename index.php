@@ -3,8 +3,9 @@
     
     use \Footprint\DataPrint\Elements\Column;
     use Zend\Db\Adapter\Adapter;
+    use Zend\Db\Sql\Sql;
     use \Footprint\Sql\SelectGenerator;
-    use Footprint\Scanner\DBScanner;
+    use Footprint\Sql\DBScanner;
     
     
     
@@ -12,7 +13,8 @@
     
     
     $dataPrint=$user->getDataPrint();
-        
+    
+
     $adapter=new Adapter(array(
             'driver'   => 'Mysqli',
             'database' => 'footprint',
@@ -22,9 +24,15 @@
             'password' => 'root',
         ));
     
-    $scanner=new DBScanner($adapter, $user->getDataPrint(), null);
+    $sql=new Sql($adapter);
     
-    $scanner->find($adapter, $user->getDataPrint(), null);
+    $g=new SelectGenerator($sql, $dataPrint);
+    $g->generate();
+    var_dump($g->getSelect()->getSqlString());
+    
+    //$scanner=new DBScanner($adapter, $user->getDataPrint(), null);
+    
+    //$scanner->find($adapter, $user->getDataPrint(), null);
     //var_dump($select->getSqlString());
     
     echo PHP_EOL;
