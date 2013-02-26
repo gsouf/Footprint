@@ -3,6 +3,7 @@
 namespace Footprint\DataPrint\Elements;
 
 use \Footprint\Entity\EntityInterface;
+use Footprint\Sql\SelectGenerator;
 
 /**
  * Description of AbstractElement
@@ -12,9 +13,24 @@ use \Footprint\Entity\EntityInterface;
 abstract class AbstractElement {
     
     /**
-     * @var int internal identifier used by the dataPrintCollection
+     * @var String the string which separat each identifier of the internalPrint. It must be SQL table and column syntaxe compatible
+     * see http://social.msdn.microsoft.com/Forums/sk/databasedesign/thread/154c19c4-95ba-4b6f-b6ca-479288feabfb#473bcd1a-34c4-45e2-a60b-9f2881727a9c
+     */
+    const INTERNALPRINTTOKEN="\$__";
+    
+    /**
+     * @var int internal identifier used by the dataPrint wrapper. Each identifier must be unique in each dataprint
      */
     private $internalIdentifier;
+    
+    
+    /**
+     *
+     * @var string 
+     */
+    private $internalPrint;
+    
+    
     
     /**
      * @var String name of the DB Column
@@ -31,11 +47,15 @@ abstract class AbstractElement {
      */
     private $setter;
     
+    private $wrapper;
     
     public function __construct($columnName, $getter, $setter) {
         $this->columnName = $columnName;
         $this->getter = $getter;
         $this->setter = $setter;
+        $this->internalPrint="";
+        
+        $this->wrapper=null;
     }
     
     /**
@@ -44,6 +64,18 @@ abstract class AbstractElement {
      */
     public function getColumnName(){
         return $this->columnName;
+    }
+    
+    public function setWrapper(AbstractEntityElement $wrapper){
+        $this->wrapper=$wrapper;
+    }
+    
+    /**
+     * 
+     * @return AbstractEntityElement
+     */
+    public function getWrapper(){
+        return $this->wrapper;
     }
     
     /**
@@ -64,13 +96,41 @@ abstract class AbstractElement {
         $instance->$setterName($value);
     }
     
+    /**
+     * INTERNAL USAGE ONLY
+     * set the internal identifier.
+     * @param int $identifier
+     */
     public function _setIdentifier($identifier){
         $this->internalIdentifier=$identifier;
     }
     
-    public function getIdentifier(){
+    /**
+     * INTERNAL USAGE ONLY
+     * get the internal identifier.
+     * @return int
+     */
+    public function _getIdentifier(){
         return $this->internalIdentifier;
     }
+    
+    /**
+     * INTERNAL USAGE ONLY
+     * @return String
+     */
+    public function _getInternalPrint() {
+        return $this->internalPrint;
+    }
+    
+    /**
+     * INTERNAL USAGE ONLY
+     * @param type $internalPrint
+     */
+    public function _setInternalPrint($internalPrint) {
+        $this->internalPrint = $internalPrint;
+    }
+
+    public abstract function onSelect(SelectGenerator $select);
     
 }
 

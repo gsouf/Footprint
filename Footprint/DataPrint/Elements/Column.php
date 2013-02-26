@@ -9,7 +9,7 @@ use Footprint\Entity\EntityInterface;
  *
  * @author Sneakybobito
  */
-class Column extends AbstractElement{
+class Column extends AbstractValueElement{
     
 
 
