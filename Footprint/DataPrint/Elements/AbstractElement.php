@@ -37,10 +37,7 @@ abstract class AbstractElement {
     
     
     
-    /**
-     * @var String name of the DB Column
-     */
-    private $columnName;
+    
     
     /**
      * @var String name of the getter method, or null 
@@ -54,8 +51,15 @@ abstract class AbstractElement {
     
     private $wrapper;
     
-    public function __construct($columnName, $getter, $setter) {
-        $this->columnName = $columnName;
+    private $isColumn;
+    
+        
+    /**
+     * @var String name of the DB Column
+     */
+    private $columnName;
+
+    public function __construct($getter, $setter) {
         $this->getter = $getter;
         $this->setter = $setter;
         $this->internalPrint="";
@@ -63,13 +67,7 @@ abstract class AbstractElement {
         $this->wrapper=null;
     }
     
-    /**
-     * the column name of the DB
-     * @return string
-     */
-    public function getColumnName(){
-        return $this->columnName;
-    }
+
     
     public function setWrapper(AbstractEntityElement $wrapper){
         $this->wrapper=$wrapper;
@@ -83,6 +81,20 @@ abstract class AbstractElement {
         return $this->wrapper;
     }
     
+    
+    /**
+     * the column name of the DB
+     * @return string
+     */
+    public function getColumnName(){
+        return $this->columnName;
+    }
+    
+    public function setColumnName($columnName) {
+        $this->columnName = $columnName;
+    }
+
+        
     /**
      * @param \Footprint\Entity\EntityInterface $instance Instance from which to get
      * @return mixed the value returned by the getter of the parent Entity
@@ -101,6 +113,27 @@ abstract class AbstractElement {
         $instance->$setterName($value);
     }
     
+
+    public function setGetter($getter) {
+        $this->getter = $getter;
+    }
+
+
+
+    public function setSetter($setter) {
+        $this->setter = $setter;
+    }
+    
+    public function getGetter() {
+        return $this->getter;
+    }
+
+    public function getSetter() {
+        return $this->setter;
+    }
+
+    
+        
     /**
      * INTERNAL USAGE ONLY
      * set the internal identifier.
@@ -135,6 +168,14 @@ abstract class AbstractElement {
         $this->internalPrint = $internalPrint;
     }
 
+    public function isColumn($isColumn=null) {
+        if(false===$isColumn || true===$isColumn)
+            $this->isColumn = $isColumn;
+        
+        return $this->isColumn;
+    }
+
+    
     public abstract function onSelect(SelectGenerator $select);
     
 }

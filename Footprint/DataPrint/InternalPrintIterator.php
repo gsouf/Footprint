@@ -4,7 +4,7 @@ namespace Footprint\DataPrint;
 
 
 /**
- * Description of DataPrintCollection
+ * Description of InternalPrintIterator
  *
  * @author SneakyBobito
  */

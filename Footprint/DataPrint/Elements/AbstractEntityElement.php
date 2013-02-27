@@ -20,6 +20,7 @@ class AbstractEntityElement extends AbstractElement implements \IteratorAggregat
     const LINK_CHILD="child";
     const LINK_CHILDREN="children";
     const LINK_NONE="none";
+    const LINK_BACKPORT="backport";
     
     /**
      * @var AbstractElement[]
@@ -53,8 +54,8 @@ class AbstractEntityElement extends AbstractElement implements \IteratorAggregat
     
     // TODO CONSTRUCTOR
     
-    public function __construct($columnName="", $getter="", $setter="") {
-        parent::__construct($columnName, $getter, $setter);
+    public function __construct($getter="", $setter="") {
+        parent::__construct($getter, $setter);
         $this->elements=array();
         $this->primary=array();
         
@@ -158,16 +159,16 @@ class AbstractEntityElement extends AbstractElement implements \IteratorAggregat
      */
     public function getPrimaryTrace($inputData,$useProperty=false,$nameMap=null){
         $primaryTrace="";
-        foreach($this->primary as $v){
-            if(is_array($nameMap) && isset($nameMap[$v]))
-                $name=$nameMap[$v];
+        foreach($this->primary as $k=>$elm){
+            if(is_array($nameMap) && isset($nameMap[$k]))
+                $name=$nameMap[$k];
             else 
-                $name=$v;
+                $name=$k;
             
             if($useProperty)
                 $primaryTrace.=$inputData->$name;
             else
-                $primaryTrace.=$this->getElementByName($name)->get($inputData);
+                $primaryTrace.=$elm->get($inputData);
         }
         
         return $primaryTrace;
@@ -196,8 +197,10 @@ class AbstractEntityElement extends AbstractElement implements \IteratorAggregat
      * @param string $value
      */
     public function registerPrimary($value){
-        $this->primary[]=$value;
-        //TODO : ERROR WHEN $value doesnt exists
+        $elm=$this->getElementByName($value);
+        if(!$elm)
+            throw new \Exception("No such column : '".$value."'");
+        $this->primary[$value]=$elm;
     }
     
     public function getTable() {
@@ -237,7 +240,9 @@ class AbstractEntityElement extends AbstractElement implements \IteratorAggregat
     public function onSelect(SelectGenerator $selectGenerator) {
         
         $iPrint=$this->_getInternalPrint();
-                
+        
+        $continue=true;
+        
         switch($this->linkMode){
         case self::LINK_CHILD :
             break;
@@ -253,10 +258,16 @@ class AbstractEntityElement extends AbstractElement implements \IteratorAggregat
         case self::LINK_NONE :
             $selectGenerator->getSelect()->from(array($iPrint=>$this->getTable()));
             break;
+        case self::LINK_BACKPORT :
+            $continue=false;
+            break;
+        
         }
         
-        foreach($this->elements as $v){
-            $v->onSelect($selectGenerator);
+        if($continue){
+            foreach($this->elements as $v){
+                $v->onSelect($selectGenerator);
+            }
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Footprint\Entity;
 
-use Footprint\DataPrint\DataPrintCollection;
+use Footprint\DataPrint\DataPrint as DataPrintCollection;
 use Footprint\DataPrint\Elements\AbstractElement;
 
 /**

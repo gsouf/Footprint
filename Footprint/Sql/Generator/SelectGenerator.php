@@ -4,7 +4,7 @@ namespace Footprint\Sql\Generator;
 
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Sql;
-use Footprint\DataPrint\DataPrintCollection;
+use Footprint\DataPrint\Elements\AbstractEntityElement;
 
 /**
  * Class to generate Zend\Db\Sql\Select from the Footprint, the depth mode and the options
@@ -30,7 +30,7 @@ class SelectGenerator {
      */
     private $select;
     
-    public function __construct(Sql $sql,DataPrintCollection $dataPrint, $options=null) {
+    public function __construct(Sql $sql, AbstractEntityElement $dataPrint, $options=null) {
         $this->sql = $sql;
         $this->dataPrint = $dataPrint;
         $this->options = is_array($options)?$options:array();
@@ -54,9 +54,12 @@ class SelectGenerator {
 
         $select->from($this->dataPrint->getTable());
         
+        // WILL BUFF COLUMNS AND JOINS
         $this->dataPrint->onSelect($this);
         
         $select->columns($this->columns[$this->dataPrint->_getInternalPrint()]);
+        
+        
         foreach($this->joins as $k=>$v){
             $select->join(array($v[0]=>$v[1]), $v[2], $this->columns[$k]);
         }

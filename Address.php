@@ -11,6 +11,7 @@ class Address{
     
     private $id;
     private $idCustomer;
+    private $customer;
     
     public function getId() {
         return $this->id;
@@ -27,6 +28,15 @@ class Address{
     public function setIdCustomer($idCustomer) {
         $this->idCustomer = $idCustomer;
     }
+    
+    public function getCustomer() {
+        return $this->customer;
+    }
+
+    public function setCustomer($customer) {
+        $this->customer = $customer;
+    }
+
 
 
 }

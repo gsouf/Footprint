@@ -11,6 +11,11 @@ use Footprint\Entity\EntityInterface;
  */
 class Column extends AbstractValueElement{
     
+    public function __construct($columnName, $getter, $setter) {
+        parent::__construct($getter, $setter);
+        $this->isColumn(true);
+        $this->setColumnName($columnName);
+    }
 
 
 }

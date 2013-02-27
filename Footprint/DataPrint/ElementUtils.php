@@ -34,24 +34,24 @@ class ElementUtils {
         if(is_array($data))
             $data=(object)$data;
         
-        // only usable if is array
+        // only usable if is array, else we can free memory
         if(!is_array($nameMap))
             $nameMap=null;
         
 
         
         foreach($dataPrint as $v){
-            if(!is_a($v,"Footprint\DataPrint\Elements\AbstractValueElement"))
-                continue;
-            
-            $columnName=$v->getColumnName();
-            
-            /* @var $v AbstractElement */
-            if(is_array($nameMap) && isset($nameMap[$columnName]))
-                $name=$nameMap[$columnName];
-            else 
-                $name=$columnName;
-            $v->set($object,$data->$name);
+
+            if($v->isColumn()){
+                $columnName=$v->getColumnName();
+
+                /* @var $v AbstractElement */
+                if(is_array($nameMap) && isset($nameMap[$columnName]))
+                    $name=$nameMap[$columnName];
+                else 
+                    $name=$columnName;
+                $v->set($object,$data->$name);
+            }
         }   
     }
     

@@ -3,7 +3,7 @@
 namespace Footprint\Sql;
 
 use Footprint\Sql\Generator\SelectGenerator;
-use Footprint\DataPrint\DataPrintCollection;
+use Footprint\DataPrint\DataPrint as DataPrintCollection;
 use Footprint\Entity\Hydrater;
 
 use Zend\Db\Sql\Sql;

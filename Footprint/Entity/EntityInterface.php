@@ -10,7 +10,7 @@ interface EntityInterface {
     
     /**
      * 
-     * @return \Footprint\DataPrint\DataPrintCollection
+     * @return \Footprint\DataPrint\Elements\AbstractEntityElement
      */
     public function getDataPrint();
 }

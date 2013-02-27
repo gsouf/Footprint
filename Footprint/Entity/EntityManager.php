@@ -2,7 +2,8 @@
 
 namespace Footprint\Entity;
 
-use Footprint\DataPrint\DataPrintCollection;
+use Footprint\DataPrint\DataPrint;
+use Footprint\DataPrint\Elements\AbstractEntityElement;
 
 /**
  * Description of EntityManager
@@ -13,7 +14,7 @@ abstract class EntityInstanceManager{
     
     public static $entities;
     
-    public static function register(\stdClass $object, DataPrintCollection $dataPrintParam=null){
+    public static function register(\stdClass $object, AbstractEntityElement $dataPrintParam=null){
         
         // check if params are ok and get the dataprint
         if(($dataPrint=self::retrieveDataPrint($object, $dataPrintParam))==null)
@@ -27,7 +28,7 @@ abstract class EntityInstanceManager{
         return true;
     }
     
-    public static function hasInstance(\stdClass $object, DataPrintCollection $dataPrintParam=null) {
+    public static function hasInstance(\stdClass $object, AbstractEntityElement $dataPrintParam=null) {
         
         // check if params are ok and get the dataprint
         if(($dataPrint=self::retrieveDataPrint($object, $dataPrintParam))==null)
@@ -45,11 +46,11 @@ abstract class EntityInstanceManager{
     /**
      * 
      * @param \stdClass $object
-     * @param \Footprint\DataPrint\DataPrintCollection $dataPrintParam
+     * @param \Footprint\DataPrint\Elements\AbstractEntityElement $dataPrintParam
      * @return null|\Footprint\DataPrint\DataPrintCollection
      * @throws Exception
      */
-    private static function retrieveDataPrint(\stdClass $object, DataPrintCollection $dataPrintParam=null) {
+    private static function retrieveDataPrint(\stdClass $object, AbstractEntityElement $dataPrintParam=null) {
         if(!$object)
             return null;
         
