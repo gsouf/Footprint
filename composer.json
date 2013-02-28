@@ -1,0 +1,25 @@
+{
+    "name": "footprint/footprint",
+    "type": "library",
+    "description": "Footprint is a micro ORM framework, lightweight, easy to understand and no intrusive",
+    "keywords": ["ORM","Entity"],
+    "homepage": "https://github.com/SneakyBobito/Footprint",
+    "license": "BSD-3",
+    "authors": [
+        {
+            "name": "Soufiane Ghzal",
+            "email": "sghzal@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3",
+        "zendframework/zendframework": "2.1.*",
+        "phpunit/PHPUnit": "3.7.*"
+        
+    },
+    "autoload": {
+        "psr-0" : {
+            "Footprint" : "lib/"
+        }
+    },
+}
