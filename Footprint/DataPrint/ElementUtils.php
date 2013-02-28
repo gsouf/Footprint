@@ -15,9 +15,11 @@ class ElementUtils {
         
         $array[$dataPrint->_getInternalPrint()]=$dataPrint;
         
-        foreach($dataPrint as $elm){
-            if(is_a($elm, "Footprint\DataPrint\Elements\AbstractEntityElement")){
-                self::getEntitiesOfDataprint($array,$elm);
+        if(AbstractEntityElement::LINK_BACKPORT!==$dataPrint->getLinkMode()){
+            foreach($dataPrint as $elm){
+                if(is_a($elm, "Footprint\DataPrint\Elements\AbstractEntityElement")){
+                    self::getEntitiesOfDataprint($array,$elm);
+                }
             }
         }
         

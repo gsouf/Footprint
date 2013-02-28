@@ -38,8 +38,9 @@
      
      
      $reader=new SelectResultReader($dataPrint, $resultSet);
-     $reader->buff();
+     $users=$reader->buff();
      
+     var_dump($users);
      
      //var_dump($dataPrint->getElementByInternalPrint(new InternalPrintIterator("0$\$__6")));
     

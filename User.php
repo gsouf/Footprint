@@ -47,7 +47,7 @@ class User implements EntityInterface{
             $d1->add($up);
             
             $d1->setJoin(array("id_customer"=>"id_customer"));
-            $d1->setLinkMode(AbstractEntityElement::LINK_PARENT);
+            $d1->setLinkMode(AbstractEntityElement::LINK_JOIN);
             $d1->registerPrimary("id");
             
             

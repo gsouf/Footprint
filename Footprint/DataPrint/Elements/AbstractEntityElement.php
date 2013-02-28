@@ -16,9 +16,7 @@ use Footprint\DataPrint\InternalPrintIterator;
  */
 class AbstractEntityElement extends AbstractElement implements \IteratorAggregate {
     
-    const LINK_PARENT="parent";
-    const LINK_CHILD="child";
-    const LINK_CHILDREN="children";
+    const LINK_JOIN="join";
     const LINK_NONE="none";
     const LINK_BACKPORT="backport";
     
@@ -237,6 +235,15 @@ class AbstractEntityElement extends AbstractElement implements \IteratorAggregat
         return $this->linkMode;
     }
     
+    
+    public function isJoin(){
+        $this->setLinkMode(self::LINK_JOIN);
+    }
+    
+    public function isBackport(){
+        $this->setLinkMode(self::LINK_BACKPORT);
+    }
+    
     public function onSelect(SelectGenerator $selectGenerator) {
         
         $iPrint=$this->_getInternalPrint();
@@ -244,11 +251,8 @@ class AbstractEntityElement extends AbstractElement implements \IteratorAggregat
         $continue=true;
         
         switch($this->linkMode){
-        case self::LINK_CHILD :
-            break;
-        case self::LINK_CHILDREN :
-            break;
-        case self::LINK_PARENT :
+
+        case self::LINK_JOIN :
             // parentColumn=thisColumn
             //$onClause=key($this->joinColumns)."=".current($this->joinColumns);
             $onClause=$this->getWrapper()->_getInternalPrint().".".key($this->joinColumns)."=".$iPrint.".".current($this->joinColumns);

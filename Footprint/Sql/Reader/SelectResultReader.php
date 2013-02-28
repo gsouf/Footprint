@@ -33,6 +33,8 @@ class SelectResultReader {
 
     public function buff(){
         
+        $returnArray=array();
+        
         /**
          * buffedEntities= array(
          *      Dataprint.internalPrint1=>array(primarytrace1,primarytrace2,primarytrace3),
@@ -128,10 +130,9 @@ class SelectResultReader {
                             }else{
                                 // TODO ERREUR ?
                             }
-                            var_dump($parentInstance);
                         }else{
-                            //else it means it is the root dataprint, then we add it to the return array
-
+                            //else it means it is a root dataprint instance, then we add it to the return array
+                            $returnArray[]=$newInstance;
                         }
 
                     }
@@ -140,6 +141,7 @@ class SelectResultReader {
 
         }
         
+        return $returnArray;
     }
 
 }
