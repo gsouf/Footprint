@@ -40,8 +40,6 @@ class ElementUtils {
         if(!is_array($nameMap))
             $nameMap=null;
         
-
-        
         foreach($dataPrint as $v){
 
             if($v->isColumn()){

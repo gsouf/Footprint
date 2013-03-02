@@ -91,7 +91,9 @@ abstract class AbstractElement {
     }
     
     public function setColumnName($columnName) {
+        var_dump($columnName);
         $this->columnName = $columnName;
+        return $this;
     }
 
         
@@ -167,10 +169,17 @@ abstract class AbstractElement {
     public function _setInternalPrint($internalPrint) {
         $this->internalPrint = $internalPrint;
     }
-
+    
+    /**
+     * 
+     * @param type $isColumn
+     * @return \Footprint\DataPrint\Elements\AbstractElement|boolean  if param $isColumn is passed and is true or false, the method will return $this. Else it will return true or false
+     */
     public function isColumn($isColumn=null) {
-        if(false===$isColumn || true===$isColumn)
+        if(false===$isColumn || true===$isColumn){
             $this->isColumn = $isColumn;
+            return $this;
+        }
         
         return $this->isColumn;
     }

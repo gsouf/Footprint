@@ -50,7 +50,6 @@ class SelectResultReader {
         // foreach result row, we look for each entity if it is already instanciated (thanks to the primaryTrace)
         // If no, we instanciate it and we hydrate it
         foreach($this->resultSet as $row){
-            
             $entityIterator=$instanceManager->getEntitiesIterator();
             foreach($entityIterator as $entity){
                 $dataPrint=$entity;
@@ -99,12 +98,11 @@ class SelectResultReader {
                         
                         //5
                         $dataPrint->set($wrapperInstance, $existingInstace);
-                        var_dump($wrapperInstance);
                     }
                     
-                }
+                }else if(AbstractEntityElement::LINK_NONE==$dataPrint->getLinkMode() && AbstractEntityElement::ROOTTOKEN!==$dataPrint->_getInternalPrint()){
                 // ELSE WE ARE A TRUE AUTHENTIC ELEMENT
-                else{
+                }else{
                 
                     $primaryTrace=$dataPrint->getPrimaryTrace($row, true, $dataPrint->getInternalPrintMap());
 

@@ -87,9 +87,7 @@ class AbstractEntityElement extends AbstractElement implements \IteratorAggregat
     public function getInternalPrintMap(){
         if(null==$this->nameToInternalprintMap){
             foreach($this as $v){
-                if(is_a($v,"Footprint\DataPrint\Elements\AbstractEntityElement")){
-
-                }else{
+                if($v->isColumn()){
                     $this->nameToInternalprintMap[$v->getColumnName()]=$v->_getInternalPrint();
                 }
             }
@@ -246,6 +244,9 @@ class AbstractEntityElement extends AbstractElement implements \IteratorAggregat
     
     public function onSelect(SelectGenerator $selectGenerator) {
         
+        if($this->isColumn())
+            $selectGenerator->addColumn($this->getColumnName(), $this->_getInternalPrint(),$this->getWrapper()->_getInternalPrint());
+        
         $iPrint=$this->_getInternalPrint();
         
         $continue=true;
@@ -260,7 +261,9 @@ class AbstractEntityElement extends AbstractElement implements \IteratorAggregat
             $selectGenerator->addJoin($iPrint,$this->getTable(),$onClause);
             break;
         case self::LINK_NONE :
-            $selectGenerator->getSelect()->from(array($iPrint=>$this->getTable()));
+            //if it is no root, then it means we want to ignore it
+            if($this::ROOTTOKEN===$this->_getInternalPrint())
+                $selectGenerator->getSelect()->from(array($iPrint=>$this->getTable()));
             break;
         case self::LINK_BACKPORT :
             $continue=false;

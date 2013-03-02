@@ -1,5 +1,7 @@
 <?php
 
+namespace Exemple\Entity;
+
 
 use Footprint\Entity\EntityInterface;
 use Footprint\DataPrint\DataPrintCollection;

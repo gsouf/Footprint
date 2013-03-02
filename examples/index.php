@@ -10,13 +10,24 @@
     use Footprint\Sql\DBScanner;
     use Footprint\DataPrint\InternalPrintIterator;
     
+    use Exemple\Dataprint\UserPrint;
+    use Exemple\Dataprint\AddressPrint;
+    
+
+    
+       
+    $up=new UserPrint("getCustomer","setCustomer");
+    $up->setLinkMode(UserPrint::LINK_BACKPORT);
+
+    $d1=new AddressPrint("getAdress","setAdress");
+    $d1->setJoin(array("id_customer"=>"id_customer"));
+    $d1->setLinkMode(UserPrint::LINK_JOIN);
+
+
+    $dataPrint=new UserPrint();
+    $dataPrint->add($d1);
     
     
-    
-    $user=new User("a@a.a","aaa");
-    
-    
-    $dataPrint=$user->getDataPrint();
     
 
     $adapter=new Adapter(array(
@@ -27,7 +38,6 @@
             'username' => 'root',
             'password' => 'root',
         ));
-    
     $sql=new Sql($adapter);
     $g=new SelectGenerator($sql, $dataPrint);
     $g->generate();

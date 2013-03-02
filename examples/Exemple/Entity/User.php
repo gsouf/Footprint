@@ -1,5 +1,6 @@
 <?php
 
+namespace Exemple\Entity;
 
 use Footprint\Entity\EntityInterface;
 use Footprint\DataPrint\DataPrint as DataPrintCollection;
@@ -7,7 +8,7 @@ use Footprint\DataPrint\Elements\AbstractEntityElement;
 
 use Footprint\DataPrint\Elements\Column;
 
-class User implements EntityInterface{
+class User{
     
     /**
      * @var DataPrintCollection

@@ -1,5 +1,7 @@
 <?php
 
+namespace Exemple\Dataprint;
+
 use Footprint\DataPrint\Elements\Column;
 
 /**
@@ -7,13 +9,13 @@ use Footprint\DataPrint\Elements\Column;
  *
  * @author bobito
  */
-class UserPrint extends Footprint\DataPrint\Elements\DataPrint{
+class UserPrint extends \Footprint\DataPrint\Elements\DataPrint{
     
 
     function __construct($getter = "", $setter = "") {
         parent::__construct($getter, $setter);
 
-        $this->setClass("User");
+        $this->setClass("Exemple\Entity\User");
         $this->setTable("customer");
         $this->add(new Column("id_customer", "getId", "setId"));
         $this->add(new Column("email", "getEmail", "setEmail"));
