@@ -199,6 +199,15 @@ class AbstractEntityElement extends AbstractElement implements \IteratorAggregat
         $this->primary[$value]=$elm;
     }
     
+    
+    /**
+     * 
+     * @return AbstractValueElement[] array of column which are primary keys
+     */
+    public function getPrimaries(){
+        return $this->primary;
+    }
+    
     public function getTable() {
         return $this->table;
     }

@@ -59,7 +59,6 @@ class SelectGenerator {
         
         $select->columns($this->columns[$this->dataPrint->_getInternalPrint()]);
         
-        
         foreach($this->joins as $k=>$v){
             $select->join(array($v[0]=>$v[1]), $v[2], $this->columns[$k]);
         }

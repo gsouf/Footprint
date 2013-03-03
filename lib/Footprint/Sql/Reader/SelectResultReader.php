@@ -92,10 +92,8 @@ class SelectResultReader {
                     }
                     
                     if(!$hasAlreadyAnInstance){
-                        
                         //4
                         $existingInstace=$instanceManager->getInstanceOf($dwPrimaryTrace, $dWrapper);
-                        
                         //5
                         $dataPrint->set($wrapperInstance, $existingInstace);
                     }

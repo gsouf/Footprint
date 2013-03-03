@@ -2,7 +2,7 @@
 
 namespace Footprint\DataPrint;
 
-
+// D E P R E C A T E D
 
 /**
  * Description of DataPrint

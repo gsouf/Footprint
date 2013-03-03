@@ -14,26 +14,40 @@ class AddressPrint extends \Footprint\DataPrint\Elements\DataPrint{
 
     function __construct($getter = "", $setter = "") {
         parent::__construct($getter, $setter);
+        // Object Class Name
         $this->setClass("Exemple\Entity\Address");
+        // Database Table
         $this->setTable("address");
-        $this->add(new Column("id", "getId", "setId"));
+        
+        
+        // COLUMNS
+        //
+        $idAddress=new Column("id_address", "getId", "setId");
+        $idAddress->ignoreOnInsert(true);
+        $this->add($idAddress);
         $this->add(new Column("id_customer", "getIdCustomer", "setIdCustomer"));
-        $this->add((new UserPrint("getCustomer","setCustomer"))->setColumnName("customer"));
+        // primary
+        $this->registerPrimary("id_address");
 
         
-        $this->backportCustomer();
-        
-        $this->registerPrimary("id");
     }
     
-    public function joinCustomer(){
-        $this->getElementByName("customer")->isJoin();
-    }
+        // ENTITIES
+        //
     
-    public function backportCustomer(){
-        //var_dump($this->getElementByName("id_customer"));
-        $this->getElementByName("customer")->isBackport();
-    }
+        public function joinCustomer(){
+            $userPrint=new UserPrint("getCustomer","setCustomer");
+            $this->add($userPrint->setColumnName("customer"));
+            $userPrint->setJoin(array("id_customer"=>"id_customer"));
+            $userPrint->isJoin();
+            return $this;
+        }
+        public function backportCustomer(){
+            $userPrint=new UserPrint("getCustomer","setCustomer");
+            $this->add($userPrint->setColumnName("customer"));
+            $userPrint->isBackport();
+            return $this;
+        }
             
 }
 

@@ -16,12 +16,12 @@ abstract class AbstractElement {
      * @var String the string which separat each identifier of the internalPrint. It must be SQL table and column syntaxe compatible
      * see http://social.msdn.microsoft.com/Forums/sk/databasedesign/thread/154c19c4-95ba-4b6f-b6ca-479288feabfb#473bcd1a-34c4-45e2-a60b-9f2881727a9c
      */
-    const INTERNALPRINTTOKEN="\$__";
+    const INTERNALPRINTTOKEN="__f__";
     
     /**
      * @var String the tring which is used for the root dataprint internalprint
      */
-    const ROOTTOKEN="0\$";
+    const ROOTTOKEN="000f";
     
     /**
      * @var int internal identifier used by the dataPrint wrapper. Each identifier must be unique in each dataprint
@@ -52,6 +52,8 @@ abstract class AbstractElement {
     private $wrapper;
     
     private $isColumn;
+    private $ignoreOnInsert;
+    private $ignoreOnUpdate;
     
         
     /**
@@ -65,6 +67,8 @@ abstract class AbstractElement {
         $this->internalPrint="";
         
         $this->wrapper=null;
+        $this->ignoreOnInsert=false;
+        $this->ignoreOnUpdate=false;
     }
     
 
@@ -91,7 +95,6 @@ abstract class AbstractElement {
     }
     
     public function setColumnName($columnName) {
-        var_dump($columnName);
         $this->columnName = $columnName;
         return $this;
     }
@@ -172,7 +175,7 @@ abstract class AbstractElement {
     
     /**
      * 
-     * @param type $isColumn
+     * @param boolean|null $isColumn default to null
      * @return \Footprint\DataPrint\Elements\AbstractElement|boolean  if param $isColumn is passed and is true or false, the method will return $this. Else it will return true or false
      */
     public function isColumn($isColumn=null) {
@@ -182,6 +185,34 @@ abstract class AbstractElement {
         }
         
         return $this->isColumn;
+    }
+    
+    /**
+     * 
+     * @param Boolean|null $ignore
+     * @return \Footprint\DataPrint\Elements\AbstractElement|boolean  if param $isColumn is passed and is true or false, the method will return $this. Else it will return true or false
+     */
+    public function ignoreOnInsert($ignore=null) {
+        if(false===$ignore || true===$ignore){
+            $this->ignoreOnInsert = $ignore;
+            return $this;
+        }
+        
+        return $this->ignoreOnInsert;
+    }
+    
+    /**
+     * 
+     * @param Boolean|null $ignore
+     * @return \Footprint\DataPrint\Elements\AbstractElement|boolean  if param $isColumn is passed and is true or false, the method will return $this. Else it will return true or false
+     */
+    public function ignoreOnUpdate($ignore=null) {
+        if(false===$ignore || true===$ignore){
+            $this->ignoreOnUpdate = $ignore;
+            return $this;
+        }
+        
+        return $this->ignoreOnUpdate;
     }
 
     
