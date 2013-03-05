@@ -4,12 +4,12 @@ namespace Footprint\Sql;
 
 use Footprint\Sql\Generator\SelectGenerator;
 use Footprint\DataPrint\DataPrint as DataPrintCollection;
-use Footprint\Entity\Hydrater;
+use Footprint\DataPrint\Elements\AbstractEntityElement;
+use Footprint\Sql\Reader\SelectResultReader;
 
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
 
-use Zend\Db\Adapter\Driver\ResultInterface;
 use Zend\Db\ResultSet\ResultSet;
 
 /**
@@ -19,37 +19,37 @@ use Zend\Db\ResultSet\ResultSet;
  */
 class DBScanner {
     
+    
+    /**
+     *
+     * @var Adapter 
+     */
+    private $adapter;
 
     
-    public function __construct() {}
+    function __construct(Adapter $adapter) {
+        $this->adapter = $adapter;
+    }
+
     
-    
-    public function find(Adapter $adapter,DataPrintCollection $dataPrint,$depthMode=null, $options=null){
+    public function select(AbstractEntityElement $dataPrint, $options=null){
+        
+        $adapter=$this->adapter;
+        
         $sql=new Sql($adapter);
-        $generator=new SelectGenerator($sql,$dataPrint,$depthMode, $options);
-        $select=$generator->generate();
+        $g=new SelectGenerator($sql, $dataPrint);
+        $g->generate();
+        $result=$sql->prepareStatementForSqlObject($g->getSelect())->execute();
+
+        $resultSet = new ResultSet;
+        $resultSet->initialize($result);
+
+
+        $reader=new SelectResultReader($dataPrint, $resultSet);
         
-        $result=$sql->prepareStatementForSqlObject($select)->execute();
-        
-        $HydratedObjects=array();
-        if ($result instanceof ResultInterface && $result->isQueryResult()){
-            $hydrater=new Hydrater();
-            
-            $resultSet = new ResultSet;
-            $resultSet->initialize($result);
-                        
-            foreach ($resultSet as $row) {
-                $primaryTrace=$dataPrint->getPrimaryTrace($row,true);
-                if(!isset($HydratedObjects[$primaryTrace])){
-                    $className=$dataPrint->getClass();
-                    $HydratedObjects[$primaryTrace]=new $className();
-                }
-                
-                $hydrater->hydrate($HydratedObjects[$primaryTrace],$dataPrint,$row);
-            }
-        }
-        return $HydratedObjects;
-        
+        $returnResult=$reader->buff();
+
+        return $returnResult;
     }
     
     

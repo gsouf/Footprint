@@ -19,19 +19,23 @@
     $adapter=new Adapter(array(
             'driver'   => 'Mysqli',
             'database' => 'footprint',
-            'host'     => '127.0.0.1',
+            
             'options'  => array('buffer_results' => true),
             'username' => 'root',
             'password' => 'root',
-            /* MAMP */
+            /* MAMP * /
+            'host'     => '127.0.0.1',
             'port'     => '8889',
             /* MAMP */
         ));
     $sql=new Sql($adapter);
     
     $dataPrint=new UserPrint();
-    $dataPrint->joinAddress();
+   // $dataPrint->joinAddress();
     
+    
+    $db=new DBScanner($adapter);
+    var_dump($db->select($dataPrint));
     
     /*  SELECT * /
     
@@ -65,7 +69,7 @@
     /**/
     
     
-    /* UPDATE */
+    /* UPDATE * /
     
     $user=new User();
     $user->setId(2);
