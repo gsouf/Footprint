@@ -5,6 +5,7 @@ namespace Footprint\Sql;
 use Footprint\Sql\Generator\SelectGenerator;
 use Footprint\Sql\Generator\SelectCountGenerator;
 use Footprint\Sql\Generator\InsertGenerator;
+use Footprint\Sql\Generator\DeleteGenerator;
 use Footprint\DataPrint\DataPrint as DataPrintCollection;
 use Footprint\DataPrint\Elements\AbstractEntityElement;
 use Footprint\Sql\Reader\SelectResultReader;
@@ -81,6 +82,17 @@ class DBScanner {
         
 
         return 0;
+    }
+    
+    public function delete(AbstractEntityElement $dataPrint,$entity){
+        
+        $adapter=$this->adapter;
+        
+        $sql=new Sql($adapter);
+
+        $g=new DeleteGenerator($sql,$dataPrint);
+        $delete=$g->generate($entity)->getDelete();
+        $sql->prepareStatementForSqlObject($delete)->execute();
     }
     
     public function insert(AbstractEntityElement $dataPrint,$entity, $options=null){
