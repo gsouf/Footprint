@@ -104,11 +104,15 @@ class SelectResultReader {
                     
                 }else if(AbstractEntityElement::LINK_NONE==$dataPrint->getLinkMode() && AbstractEntityElement::ROOTTOKEN!==$dataPrint->_getInternalPrint()){
                 
-                    // this is neither backported nor joined child element, so lets ignore it
+                    // this is neither backported nor joined child element, so lets ignore it. Maybe throw an exception ?
                 
                 }else{// ELSE WE ARE A TRUE AUTHENTIC ELEMENT
                 
                     $primaryTrace=$dataPrint->getPrimaryTrace($row, true, $dataPrint->getInternalPrintMap());
+                    
+                    if(empty($primaryTrace))
+                        continue;   // if it is empty is means that there is nothing to join
+                                    //TODO : make this stronger and saffer
 
                     //if instance already exists, dont create it, dont hydrate it
                     if(!$instanceManager->hasInstaceOf($primaryTrace, $dataPrint)){

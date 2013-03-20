@@ -61,7 +61,7 @@ class SelectGenerator {
         $select->columns($this->columns[$this->dataPrint->_getInternalPrint()]);
         
         foreach($this->joins as $k=>$v){
-            $select->join(array($v[0]=>$v[1]), $v[2], $this->columns[$k]);
+            $select->join(array($v[0]=>$v[1]), $v[2], $this->columns[$k],Select::JOIN_LEFT);
         }
         
         $options=new OptionFactory($this->options);
