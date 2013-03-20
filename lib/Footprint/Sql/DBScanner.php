@@ -6,6 +6,7 @@ use Footprint\Sql\Generator\SelectGenerator;
 use Footprint\Sql\Generator\SelectCountGenerator;
 use Footprint\Sql\Generator\InsertGenerator;
 use Footprint\Sql\Generator\DeleteGenerator;
+use Footprint\Sql\Generator\UpdateGenerator;
 use Footprint\DataPrint\DataPrint as DataPrintCollection;
 use Footprint\DataPrint\Elements\AbstractEntityElement;
 use Footprint\Sql\Reader\SelectResultReader;
@@ -104,6 +105,24 @@ class DBScanner {
         $g=new InsertGenerator($sql,$dataPrint);
         $insert=$g->generate($entity)->getInsert();
         $sql->prepareStatementForSqlObject($insert)->execute();
+    }
+    
+    /**
+     * 
+     * @param \Footprint\DataPrint\Elements\AbstractEntityElement $dataPrint the dataprint model
+     * @param object $entity the entity with the values
+     * @param array $restrictCol list of columns to update (only these columns will be updated)
+     * @param array $ignoreCol  list of ignored column for update
+     */
+    public function update(AbstractEntityElement $dataPrint,$entity, $restrictCol=null,$ignoreCol=null){
+       
+        $adapter=$this->adapter;
+        
+        $sql=new Sql($adapter);
+        
+        $g=new UpdateGenerator($sql,$dataPrint);
+        $update=$g->generate($entity,$restrictCol,$ignoreCol)->getUpdate();
+        $sql->prepareStatementForSqlObject($update)->execute();
     }
     
     
