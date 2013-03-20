@@ -60,6 +60,29 @@ class ElementUtils {
         return new $className();
     }
     
+    /**
+     * 
+     * will search in the given array if an object of the array matches with the given primarytrace/dataprint
+     * 
+     * @param \Footprint\DataPrint\Elements\AbstractEntityElement $dataPrint the dataprint from which the primary comes
+     * @param type $primaryTrace the required primarytrace
+     * @param Object|array $searched if it is array (must be an array of the searched class) will search into each element of the array else will look wether the object matches
+     */
+    public static function hasThisInstace(AbstractEntityElement $dataPrint,$primaryTrace,$searched){
+        if(is_a($searched, $dataPrint->getClass())){ // if it is the same class
+            return $dataPrint->getPrimaryTrace($searched)==$primaryTrace; // and the same primary trace
+        
+            
+        }else if(is_array($searched)){ 
+            foreach($searched as $object){ //if it is an array we look with recursion
+                if(self::hasThisInstace($dataPrint, $primaryTrace, $object))
+                    return true;
+            }
+        }
+        
+        return false;
+    }
+    
 }
 
 ?>

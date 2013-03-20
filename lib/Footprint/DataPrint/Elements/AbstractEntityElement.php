@@ -101,14 +101,27 @@ class AbstractEntityElement extends AbstractElement implements \IteratorAggregat
     }
     
     /**
-     * search amoung the first-depth elements to find the element with the given name
+     * search amoung the elements to find the element with the given name the char "." is usable if you search into a wraped element
      * @param type $name
      * @return AbstractElement|boolean
      */
     public function getElementByName($name){
+        
+        if(strpos($name, ".")>0){
+            $lookDeeper=true;
+            $oneName=  strstr($name, ".", true );
+        }else{
+            $lookDeeper=false;
+            $oneName= $name;
+        }
+        
         foreach($this->elements as $v){
-            if($v->getColumnName()==$name)
-                return $v;
+            if($v->getColumnName()==$oneName){
+                if($lookDeeper){
+                    return $v->getElementByName(strstr($name, "."));
+                }else
+                    return $v;
+            }
         }
         return false;
     }

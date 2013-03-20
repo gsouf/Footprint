@@ -5,6 +5,7 @@ namespace Footprint\Sql\Generator;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Sql;
 use Footprint\DataPrint\Elements\AbstractEntityElement;
+use Footprint\Sql\Generator\OptionFactory;
 
 /**
  * Class to generate Zend\Db\Sql\Select from the Footprint, the depth mode and the options
@@ -62,6 +63,9 @@ class SelectGenerator {
         foreach($this->joins as $k=>$v){
             $select->join(array($v[0]=>$v[1]), $v[2], $this->columns[$k]);
         }
+        
+        $options=new OptionFactory($this->options);
+        $options->renderTo($select);
 
     }
     

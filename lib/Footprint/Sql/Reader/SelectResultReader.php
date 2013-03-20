@@ -50,7 +50,11 @@ class SelectResultReader {
         // foreach result row, we look for each entity if it is already instanciated (thanks to the primaryTrace)
         // If no, we instanciate it and we hydrate it
         foreach($this->resultSet as $row){
+            
+            
+            
             $entityIterator=$instanceManager->getEntitiesIterator();
+            
             foreach($entityIterator as $entity){
                 $dataPrint=$entity;
                 
@@ -99,12 +103,14 @@ class SelectResultReader {
                     }
                     
                 }else if(AbstractEntityElement::LINK_NONE==$dataPrint->getLinkMode() && AbstractEntityElement::ROOTTOKEN!==$dataPrint->_getInternalPrint()){
-                // ELSE WE ARE A TRUE AUTHENTIC ELEMENT
-                }else{
+                
+                    // this is neither backported nor joined child element, so lets ignore it
+                
+                }else{// ELSE WE ARE A TRUE AUTHENTIC ELEMENT
                 
                     $primaryTrace=$dataPrint->getPrimaryTrace($row, true, $dataPrint->getInternalPrintMap());
 
-                    //if instance already exists, we ignore it
+                    //if instance already exists, dont create it, dont hydrate it
                     if(!$instanceManager->hasInstaceOf($primaryTrace, $dataPrint)){
 
                         // create a new instance
@@ -113,24 +119,36 @@ class SelectResultReader {
                         $newInstance=ElementUtils::createInstace($dataPrint);
                         ElementUtils::hydrateColmuns($newInstance, $dataPrint, $row, $dataPrint->getInternalPrintMap());
                         $instanceManager->addInstance($newInstance, $dataPrint);
+                    }else{
+                        $newInstance=$instanceManager->getInstanceOf($primaryTrace, $dataPrint);
+                    }
+                    
 
-                        // searching the parent instance
-                        $wrapper=$dataPrint->getWrapper();
-                        if($wrapper){
+                    
+                    // FINALY WE LOOK IF WE HAVE TO ADD THE INSTANCE TO THE PARENT OR TO THE RETURNED ARRAY  
+                    //
+                    //
+                    $wrapper=$dataPrint->getWrapper();
 
-                            //if has a wrapper, find the parentInstance, then add the childInstance into
-                            $parentPrimaryTrace=$wrapper->getPrimaryTrace($row, true, $wrapper->getInternalPrintMap());
-                            $parentInstance=$instanceManager->getInstanceOf($parentPrimaryTrace, $wrapper);
-                            if($parentInstance){
+                    if($wrapper){//if has a wrapper, find the parentInstance, then add the childInstance into
+
+                        $parentPrimaryTrace=$wrapper->getPrimaryTrace($row, true, $wrapper->getInternalPrintMap());
+                        $parentInstance=$instanceManager->getInstanceOf($parentPrimaryTrace, $wrapper);
+                        if($parentInstance){
+
+
+                            if(!ElementUtils::hasThisInstace($dataPrint, $primaryTrace, $dataPrint->get($parentInstance))){// if the child instance is not into the parent
                                 $dataPrint->set($parentInstance, $newInstance);
-                            }else{
-                                // TODO ERREUR ?
                             }
-                        }else{
-                            //else it means it is a root dataprint instance, then we add it to the return array
-                            $returnArray[]=$newInstance;
-                        }
 
+
+                        }else{
+                            // TODO ERREUR
+                        }
+                    }else{
+                        //else it means it is a root dataprint instance, then we add it to the return array if still not in
+                        if(!ElementUtils::hasThisInstace($dataPrint, $primaryTrace, $returnArray))
+                            $returnArray[]=$newInstance;
                     }
                 }
             }
