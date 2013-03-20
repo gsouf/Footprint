@@ -43,25 +43,20 @@ class DBScanner {
         $adapter=$this->adapter;
         
         $sql=new Sql($adapter);
+        
+        //generate sql string
         $g=new SelectGenerator($sql, $dataPrint);
         $g->generate();
+        
+        // execute the request
         $result=$sql->prepareStatementForSqlObject($g->getSelect())->execute();
 
         $resultSet = new ResultSet;
         $resultSet->initialize($result);
 
-
+        // fill in objects
         $reader=new SelectResultReader($dataPrint, $resultSet);
-        
-        
-        $result=$sql->prepareStatementForSqlObject($g->getSelect())->execute();
 
-        $resultSet = new ResultSet;
-        $resultSet->initialize($result);
-
-        
-        $reader=new SelectResultReader($dataPrint, $resultSet);
-        
         $returnResult=$reader->buff();
 
         return $returnResult;
