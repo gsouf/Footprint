@@ -9,7 +9,7 @@ use Footprint\DataPrint\ElementUtils;
 use Footprint\DataPrint\InstanceManager as InstanceManager;
 
 /**
- * Class to generate Zend\Db\Sql\Select from the Footprint, the depth mode and the options
+ * This class will allow to recursively fill in and return object from a sql resource generated from a Footprint\Sql\Generator\SelectGenerator
  *
  * @author SneakyBobito
  */

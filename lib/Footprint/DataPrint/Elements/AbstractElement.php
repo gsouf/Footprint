@@ -19,7 +19,7 @@ abstract class AbstractElement {
     const INTERNALPRINTTOKEN="__f__";
     
     /**
-     * @var String the tring which is used for the root dataprint internalprint
+     * @var String the string which is used for the root dataprint internalprint
      */
     const ROOTTOKEN="000f";
     
@@ -174,7 +174,7 @@ abstract class AbstractElement {
     }
     
     /**
-     * 
+     * Call it with a param and it will be a setter. Call it without param and it will say wether or not it is a column
      * @param boolean|null $isColumn default to null
      * @return \Footprint\DataPrint\Elements\AbstractElement|boolean  if param $isColumn is passed and is true or false, the method will return $this. Else it will return true or false
      */
